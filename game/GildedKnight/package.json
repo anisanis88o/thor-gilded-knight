@@ -1,0 +1,29 @@
+{
+  "name": "gilded-knight-vs-violet-sentinel",
+  "productName": "Gilded Knight",
+  "version": "6.6.0",
+  "description": "Balanced local PvP and co-op boss duels with remappable keyboard and controller layouts",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node tests/smoke.test.js",
+    "build-win": "electron-builder --win portable",
+    "build-mac": "electron-builder --mac dmg",
+    "build-linux": "electron-builder --linux AppImage"
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  },
+  "build": {
+    "appId": "com.example.gildedknight",
+    "productName": "Gilded Knight",
+    "files": [
+      "main.js",
+      "game/**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    }
+  }
+}
