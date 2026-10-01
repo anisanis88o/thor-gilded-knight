@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>The Gilded Knight — Boss Duels</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="wrap">
+      <div id="stage">
+        <canvas id="c"></canvas>
+
+        <div id="title" class="ov main-menu">
+          <div class="menu-vignette"></div>
+          <div class="menu-brand">
+            <div class="brand-kicker">A MOONLIT BOSS DUEL</div>
+            <h1>GILDED<br />KNIGHT</h1>
+            <div class="brand-rule"></div>
+            <p>
+              Choose your champion. Shape their build. Enter the fallen nave.
+            </p>
+          </div>
+          <nav class="main-actions" aria-label="Main menu">
+            <button id="singlePlayer" class="menu-btn primary">
+              SINGLE PLAYER<span>Choose a boss and begin</span>
+            </button>
+            <button id="openCoop" class="menu-btn">
+              LOCAL CO-OP<span>Two heroes versus one boss · 2× boss health · 5 flasks each</span>
+            </button>
+            <button id="openPvp" class="menu-btn">
+              LOCAL PVP<span>50% player damage · keyboard or controllers · 4 flasks each</span>
+            </button>
+            <button id="openLoadout" class="menu-btn">
+              CHAMPION &amp; BUILD<span
+                >Hero selection and three relic cases</span
+              >
+            </button>
+            <button id="openShop" class="menu-btn">
+              RELIC SHOP<span>Spin, collect, equip and sell</span>
+            </button>
+            <button id="openSettings" class="menu-btn">
+              OPTIONS<span>Controls, sound, resolution and graphics</span>
+            </button>
+          </nav>
+          <div class="menu-footer">
+            <span id="menuCoins">0 COINS</span
+            ><span>F FULLSCREEN · M MUTE</span>
+          </div>
+        </div>
+
+        <div id="multiplayerLobby" class="ov sub-screen hide">
+          <div class="screen-panel multiplayer-panel">
+            <div class="screen-head">
+              <div>
+                <span id="multiKicker">LOCAL MULTIPLAYER</span>
+                <h2 id="multiTitle">Prepare Both Fighters</h2>
+              </div>
+              <button class="back-btn" data-back="menu">BACK</button>
+            </div>
+            <div class="multi-grid">
+              <section class="multi-player p1">
+                <h3>Player 1</h3>                  <label>Champion
+                  <select id="multiHero1">
+                    <option value="knight">The Gilded Knight</option>
+                    <option value="shadow">Shadow</option>
+                    <option value="ronin">Crimson Ronin</option>
+                    <option value="regal">Metal Regal</option>
+                    <option value="wizard">The Arcane Wizard</option>
+                    <option value="killnux">Killnux</option>
+                    <option value="wraithknight">Purple Wraithspike Knight</option>
+                    <option value="thor">Thor, the Stormbringer</option>
+                  </select>
+                </label>
+                <p id="p1ControlSummary">A/D move · W jump · J attack · K parry · L dodge<br />B block · Q flask · R/E skills</p>
+                <button id="editP1Controls" class="go alt small">CHANGE P1 CONTROLS</button>
+              </section>
+              <section class="multi-player p2">
+                <h3>Player 2</h3>
+                <label>Champion
+                  <select id="multiHero2">
+                    <option value="knight">The Gilded Knight</option>
+                    <option value="shadow">Shadow</option>
+                    <option value="ronin">Crimson Ronin</option>
+                    <option value="regal">Metal Regal</option>
+                    <option value="wizard">The Arcane Wizard</option>
+                    <option value="killnux" selected>Killnux</option>
+                    <option value="wraithknight">Purple Wraithspike Knight</option>
+                    <option value="thor">Thor, the Stormbringer</option>
+                  </select>
+                </label>
+                <p id="p2ControlSummary">←/→ move · ↑ jump · Num 1 attack · Num 2 parry · Num 3 dodge<br />Num 0 block · Num 4 flask · Num 5/6 skills</p>
+                <button id="editP2Controls" class="go alt small">CHANGE P2 CONTROLS</button>
+              </section>
+            </div>
+            <label id="multiBossWrap" class="multi-boss">Boss
+              <select id="multiBoss">
+                <option value="sentinel">The Violet Sentinel</option>
+                <option value="art">Artorias the Abysswalker</option>
+                <option value="demon">Shattered Demon</option>
+                <option value="shogun">The Infernal Shogun</option>
+                <option value="volturus">Volturus, the Stormlord</option>
+                <option value="wraith">Obsidian Tendril Wraith</option>
+                <option value="warden">Embercrown Iridescent Warden</option>
+                <option value="spire">The Black Spire Knight</option>
+              </select>
+            </label>
+            <div class="multi-actions">
+              <button id="startMultiplayer" class="go">BEGIN</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="bossSelect" class="ov sub-screen hide">
+          <div class="screen-panel boss-panel">
+            <div class="screen-head">
+              <div>
+                <span>SINGLE PLAYER</span>
+                <h2>Choose Your Opponent</h2>
+              </div>
+              <button class="back-btn" data-back="menu">BACK</button>
+            </div>
+            <div class="boss-grid">
+              <button id="pickSent" class="card sent">
+                <div id="cSent" class="pic"></div>
+                <div class="cn">The Violet Sentinel</div>
+                <div class="cs">Health 4000 · Moonlit nave · Balanced duel</div>
+              </button>
+              <button id="pickArt" class="card art">
+                <div id="cArt" class="pic art"></div>
+                <div class="cn">Artorias the Abysswalker</div>
+                <div class="cs">
+                  Health 12000 · Phase two at 6000 HP · Relentless pressure
+                </div>
+              </button>
+              <button id="pickDemon" class="card demon">
+                <div id="cDemon" class="pic demon"></div>
+                <div class="cn">Shattered Demon</div>
+                <div class="cs">
+                  Health 16000 · Phases at 11200 and 4800 HP · Extreme danger
+                </div>
+              </button>
+              <button id="pickShogun" class="card shogun">
+                <div id="cShogun" class="pic shogun"></div>
+                <div class="cn">The Infernal Shogun</div>
+                <div class="cs">
+                  Health 15000 · Moonlit reed sea · Winged bowmaster · Black-flame phase
+                </div>
+              </button>
+              <button id="pickVolturus" class="card volturus">
+                <div id="cVolturus" class="pic volturus"></div>
+                <div class="cn">Volturus, the Stormlord</div>
+                <div class="cs">
+                  15000 HP · Three phases · Resurrects with 10000 HP · God of thunder
+                </div>
+              </button>
+              <button id="pickWraith" class="card wraith">
+                <div id="cWraith" class="pic wraith"></div>
+                <div class="cn">Obsidian Tendril Wraith</div>
+                <div class="cs">
+                  15000 HP · Symbiote arsenal · Dark phase at half health
+                </div>
+              </button>
+              <button id="pickWarden" class="card warden">
+                <div id="cWarden" class="pic warden"></div>
+                <div class="cn">Embercrown Iridescent Warden</div>
+                <div class="cs">
+                  25000 HP · Fire and moonlight greatswords · Nightlord arsenal
+                </div>
+              </button>
+              <button id="pickSpire" class="card spire">
+                <div id="cSpire" class="pic spire"></div>
+                <div class="cn">The Black Spire Knight</div>
+                <div class="cs">
+                  30000 HP · 3–4 hit greatsword combos · Crimson darkness rush
+                </div>
+              </button>
+            </div>
+            <div class="reward-note">
+              VICTORY REWARD <b>+200 COINS</b>
+              <span
+                >Current champion:
+                <strong id="bossHeroName">The Gilded Knight</strong></span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div id="loadout" class="ov sub-screen hide">
+          <div class="screen-panel loadout-panel">
+            <div class="screen-head">
+              <div>
+                <span>PREPARE</span>
+                <h2>Champion &amp; Build</h2>
+              </div>
+              <button class="back-btn" data-back="menu">DONE</button>
+            </div>
+            <div class="loadout-grid">
+              <section>
+                <h3>Choose Champion</h3>
+                <div class="hero-picks">
+                  <button id="pickKnight" class="card hero selected">
+                    <div id="cKnight" class="pic"></div>
+                    <div class="cn">The Gilded Knight</div>
+                    <div class="cs">
+                      500 HP · 140 stamina · Sword and shield
+                    </div>
+                  </button>
+                  <button id="pickShadow" class="card hero shadow">
+                    <div id="cShadow" class="pic shadow"></div>
+                    <div class="cn">Shadow</div>
+                    <div class="cs">
+                      400 HP · 200 stamina · Bow and teleport
+                    </div>
+                  </button>
+                  <button id="pickRonin" class="card hero ronin">
+                    <div id="cRonin" class="pic ronin"></div>
+                    <div class="cn">Crimson Ronin</div>
+                    <div class="cs">
+                      500 HP · 300 stamina · Twin red katanas
+                    </div>
+                  </button>
+                  <button id="pickRegal" class="card hero regal">
+                    <div id="cRegal" class="pic regal"></div>
+                    <div class="cn">Metal Regal</div>
+                    <div class="cs">
+                      450 HP · 250 stamina · Gunblade duelist
+                    </div>
+                  </button>
+                  <button id="pickWizard" class="card hero wizard">
+                    <div id="cWizard" class="pic wizard"></div>
+                    <div class="cn">The Arcane Wizard</div>
+                    <div class="cs">
+                      300 HP · 200 stamina · Sorcery and summons
+                    </div>
+                  </button>
+                  <button id="pickKillnux" class="card hero killnux">
+                    <div id="cKillnux" class="pic killnux"></div>
+                    <div class="cn">Killnux</div>
+                    <div class="cs">
+                      600 HP · 300 stamina · Colossal greatsword
+                    </div>
+                  </button>
+                  <button id="pickWraithKnight" class="card hero wraithknight">
+                    <div id="cWraithKnight" class="pic wraithknight"></div>
+                    <div class="cn">Purple Wraithspike Knight</div>
+                    <div class="cs">
+                      500 HP · 300 stamina · Hand parry · Wraith transformation
+                    </div>
+                  </button>
+                  <button id="pickThor" class="card hero thor">
+                    <div id="cThor" class="pic thor"></div>
+                    <div class="cn">Thor, the Stormbringer</div>
+                    <div class="cs">
+                      500 HP · 400 stamina · Lightning parry · Storm Ascension
+                    </div>
+                  </button>
+                </div>
+              </section>
+              <section class="build-side">
+                <h3>Relic Cases <small>Equip up to three</small></h3>
+                <div id="relicSlots" class="relic-slots"></div>
+                <div id="buildStats" class="build-stats"></div>
+                <h3>Relic Inventory</h3>
+                <div id="relicInventory" class="relic-inventory"></div>
+                <div class="loadout-help">
+                  Select an owned relic, then choose a case. Click an equipped
+                  case to remove it.
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <div id="shop" class="ov sub-screen hide">
+          <div class="screen-panel shop-panel">
+            <div class="screen-head">
+              <div>
+                <span>THE GREY ARCHIVE</span>
+                <h2>Relic Shop</h2>
+              </div>
+              <button class="back-btn" data-back="menu">BACK</button>
+            </div>
+            <div class="shop-grid">
+              <section class="reliquary">
+                <div class="coin-line">
+                  <span>YOUR COINS</span><b id="shopCoins">0</b>
+                </div>
+                <div id="spinCrystal" class="spin-crystal">
+                  <i></i><em>?</em>
+                </div>
+                <div id="spinResult" class="spin-result">
+                  All-rarity relic spin · 100 coins
+                </div>
+                <button id="spinRelic" class="go">SPIN RELIC — 100</button>
+                <div class="rates">
+                  <b>DROP CHANCES</b><br />COMMON 50% · RARE 30% · MYTHIC 15%<br />LEGENDARY
+                  4% · ANIS 1% · HARDY 0.01%
+                </div>
+              </section>
+              <section>
+                <div class="shop-title-row">
+                  <h3>Relic Archive</h3>
+                  <div class="scroll-controls">
+                    <button id="archiveUp" aria-label="Scroll relic archive up">
+                      ▲</button
+                    ><button
+                      id="archiveDown"
+                      aria-label="Scroll relic archive down"
+                    >
+                      ▼
+                    </button>
+                  </div>
+                </div>
+                <div id="shopRelicList" class="shop-list" tabindex="0"></div>
+                <p class="shop-note">
+                  Every spin awards one relic. Common relics sell for 40 coins;
+                  higher rarities are kept in your collection.
+                </p>
+                <h3>Your Collection</h3>
+                <div id="shopInventory" class="shop-inventory"></div>
+              </section>
+            </div>
+          </div>
+        </div>
+
+        <div id="end" class="ov hide">
+          <h2 id="endTitle"></h2>
+          <p id="endSub"></p>
+          <div class="btns">
+            <button id="endBtn" class="go">Try again</button
+            ><button id="menuBtn" class="go alt">Main menu</button>
+          </div>
+        </div>
+
+        <div id="settings" class="ov hide">
+          <div class="panel">
+            <h2>Options</h2>
+            <div class="control-player">
+              <label>Editing controls for
+                <select id="bindPlayer">
+                  <option value="1">Player 1</option>
+                  <option value="2">Player 2</option>
+                </select>
+              </label>
+            </div>
+            <div class="khead">
+              <span></span><b>Key 1</b><b>Key 2</b><b>Key 3</b>
+            </div>
+            <div id="keyTable"></div>
+            <div id="capPad" class="cappad hide">
+              Press a key now, or click this box with a mouse button.<small
+                >Esc cancels. Backspace clears the box.</small
+              >
+            </div>
+            <div id="bindMsg" class="bmsg" aria-live="polite"></div>
+            <div class="vols">
+              <label
+                >Music
+                <input id="volMusic" type="range" min="0" max="100" value="80"
+              /></label>
+              <label
+                >Effects
+                <input id="volSfx" type="range" min="0" max="100" value="90"
+              /></label>
+            </div>
+            <div class="video-options">
+              <label
+                >Display resolution
+                <select id="resolutionScale">
+                  <option value="800x600">800 × 600 (4:3)</option>
+                  <option value="1152x864">1152 × 864 (4:3)</option>
+                  <option value="1280x1024">1280 × 1024 (5:4)</option>
+                  <option value="1280x720" selected>1280 × 720 (16:9)</option>
+                  <option value="1600x900">1600 × 900 (16:9)</option>
+                  <option value="1680x1050">1680 × 1050 (16:10)</option>
+                  <option value="1280x800">1280 × 800 (16:10)</option>
+                  <option value="1920x1080">1920 × 1080 (16:9)</option>
+                </select></label
+              >
+              <label
+                >Graphics
+                <select id="graphicsMode">
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high" selected>High</option>
+                </select></label
+              >
+            </div>
+            <div class="performance-note">
+              <b id="renderInfo">Render: 1280 × 720</b>
+              <span>Low and Medium reduce the real internal render size, particles, fog, glow, and background-layer density.</span>
+            </div>
+            <div class="controller-options">
+              <div class="controller-head">
+                <b>Controller layout</b>
+                <span id="gamepadStatus">No controller detected</span>
+              </div>
+              <div id="padTable"></div>
+              <p>Controller 1 controls Player 1. Controller 2 controls Player 2. Standard Xbox 360, Xbox One, Xbox Series S/X, PS4, and PS5 layouts are supported.</p>
+            </div>
+            <div class="console-option">
+              <span>Command console key</span>
+              <button id="consoleBind" class="slot">`</button>
+              <small>Commands: <b>allrelic</b> · <b>moneyall</b></small>
+            </div>
+            <div class="btns">
+              <button id="resetBinds" class="go alt small">
+                Reset to defaults</button
+              ><button id="closeSettings" class="go small">Done</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="pause" class="ov hide">
+          <div class="panel narrow">
+            <h2>Paused</h2>
+            <div class="btns col">
+              <button id="resumeBtn" class="go">Resume</button>
+              <button id="pauseSettings" class="go alt">
+                Controls &amp; music
+              </button>
+              <button id="quitBtn" class="go alt">Quit to menu</button>
+            </div>
+          </div>
+        </div>
+        <button id="pauseBtn" class="hide" aria-label="Pause">II</button>
+        <div id="fpsCounter">FPS --</div>
+        <div id="devConsole" class="hide">
+          <div class="console-title">COMMAND CONSOLE</div>
+          <div id="consoleOutput">Type help for commands.</div>
+          <input id="consoleInput" autocomplete="off" spellcheck="false" placeholder="Enter command…" />
+        </div>
+
+        <div id="touch" class="hide">
+          <button class="tb" id="bl" data-a="left">LEFT</button>
+          <button class="tb" id="bdn" data-a="down">DOWN</button>
+          <button class="tb" id="br" data-a="right">RIGHT</button>
+          <button class="tb big" id="ba" data-a="attack">ATTACK</button>
+          <button class="tb" id="bp" data-a="parry">PARRY</button>
+          <button class="tb" id="bd" data-a="dodge">DODGE</button>
+          <button class="tb" id="bj" data-a="jump">JUMP</button>
+          <button class="tb" id="bh" data-a="heal">FLASK</button>
+          <button class="tb" id="bb" data-a="block">BLOCK</button>
+          <button class="tb sk" id="bs1" data-a="skill1">SLASH</button>
+          <button class="tb sk" id="bs2" data-a="skill2">BOMB</button>
+        </div>
+        <button id="mute" aria-label="Mute sound">🔊</button>
+      </div>
+    </div>
+    <script src="game.js"></script>
+  </body>
+</html>
